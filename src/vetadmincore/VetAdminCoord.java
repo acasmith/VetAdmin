@@ -10,6 +10,8 @@ package vetadmincore;
  * @author Adam
  */
 public class VetAdminCoord {
+    
+    public static int idCounter = 0;
 
     /**
      * @param args the command line arguments
@@ -18,4 +20,13 @@ public class VetAdminCoord {
         // TODO code application logic here
     }
     
+    
+    /**
+     * Returns the current idCounter value, then increments it by 1.
+     * @return the integer value of idCounter.
+     */
+    public static int getIDCounter()
+    {
+        return VetAdminCoord.idCounter++;   
+    }
 }

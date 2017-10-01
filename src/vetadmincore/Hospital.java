@@ -152,16 +152,22 @@ public class Hospital implements Comparable<Hospital>{
     
     
     /**
-     * Places hospitals in alphabetical order with 'a' having highest priority.
+     * Places hospitals in alphabetical order by name, with 'a' having highest 
+     * priority.
      * 
-     * @param aHospital
+     * @param aHospital a hospital object to compare against the receiver.
      * 
      * @return an integer indicating whether the receiver is less than, greater
      * than or equal to the argument.
      */
     @Override
-    public int compareTo(Hospital aHospital)
+    public int compareTo(Hospital aHospital) throws NullPointerException
     {
+        if(aHospital == null)
+        {
+            throw new NullPointerException("The compareTo argument is null.");
+        }
+        
         String receiverName = this.getName().trim().toLowerCase();
         String argName = aHospital.getName().trim().toLowerCase();
         int returnValue = 0;
@@ -171,10 +177,10 @@ public class Hospital implements Comparable<Hospital>{
         {
             return returnValue;
         }
-        //Performs character comparisons.
+        //Performs character comparisons on name attributes.
         else
         {
-            for(int i = 0; i < receiverName.length(); i++)
+            for(int i = 0; i < receiverName.length() && i < argName.length(); i++)
             {
                 if(receiverName.charAt(i) < argName.charAt(i))
                 {
@@ -190,7 +196,7 @@ public class Hospital implements Comparable<Hospital>{
         }
         
         /*Catches where one string is shorter than the other, but is also a 
-        substring of the longer string. Shorter comes first. */
+        substring of the longer string. Shorter has priority. */
         if(returnValue == 0)
         {
             returnValue = (receiverName.length() < argName.length()) ? -1 : 1;
