@@ -18,6 +18,9 @@ public class Person implements Comparable<Person>{
     private String emailAddress;
     private String phoneNumber;
     
+    
+    
+    
     /**
      * Constructor
      * @param title     the persons title.
@@ -38,6 +41,9 @@ public class Person implements Comparable<Person>{
         this.phoneNumber = phoneNumber;
     }
     
+    
+    
+    
     /**
      * Returns the persons title.
      * @return a string representing the persons title.
@@ -46,6 +52,7 @@ public class Person implements Comparable<Person>{
     {
         return this.title;
     }  
+    
     
     
     
@@ -71,6 +78,7 @@ public class Person implements Comparable<Person>{
     
     
     
+    
     /**
      * Returns the persons email address.
      * @return a string representing the persons email address.
@@ -79,6 +87,7 @@ public class Person implements Comparable<Person>{
     {
         return this.emailAddress;
     }
+    
     
     
     
@@ -93,6 +102,8 @@ public class Person implements Comparable<Person>{
     
     
     
+    
+    
     /**
      * Returns the persons address.
      * @return a string representing the persons address.
@@ -101,6 +112,8 @@ public class Person implements Comparable<Person>{
     {
         return this.address;
     }
+    
+    
     
     
     /**
@@ -112,6 +125,8 @@ public class Person implements Comparable<Person>{
     {
         return this.title + " " + this.firstName + " " + this.lastName;
     }
+    
+    
     
     
     /**
@@ -136,21 +151,7 @@ public class Person implements Comparable<Person>{
         return false;
     }
     
-    /**
-     * Creates a hash based on the sum of the hash codes of the fields used to
-     * determine equality (toString(), address) and the product of
-     * two arbitrary primes.
-     * 
-     * @return an integer representing a hash code for the object.
-     */
-    @Override
-    public int hashCode()
-    {
-        int result = 47 * 13;
-        int equalsFieldsHash = this.toString().hashCode() + 
-                                this.getAddress().hashCode();
-        return result + equalsFieldsHash;
-    }
+    
     
     
     /**

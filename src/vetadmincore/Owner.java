@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author Adam
  */
-public class Owner {
+public class Owner implements Comparable<Owner> {
     
     private boolean staffDiscount;
     private final int iD;
@@ -165,5 +165,121 @@ public class Owner {
     public SortedSet<Appointment> getAppointments()
     {
         return new TreeSet<Appointment>(this.appointments);
+    }
+    
+    
+    
+    
+    /**
+     * Returns the owners full name.
+     * @return a string representing the owners full name.
+     */
+    @Override
+    public String toString()
+    {
+        return this.thePerson.toString();
+    }
+    
+    
+    
+    
+    /**
+     * Checks whether the receiver and argument represent the same person.
+     * Returns true if the argument is an instance of Owner and has the same 
+     * name and address as the receiver.
+     * 
+     * @param anObject  the object to compare against the receiver.
+     * @return a boolean representing whether the receiver and argument are equal.
+     */
+    @Override
+    public boolean equals(Object anObject)
+    {
+        if((anObject != null) && (anObject instanceof Owner))
+        {
+            Owner arg = (Owner)anObject;
+            if(this.toString().equals(arg.toString()) &&
+                    this.getAddress().equals(arg.getAddress()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    
+    
+    /**
+     * Creates a hash based on the sum of the hash codes of the fields used to
+     * determine equality (name, address) and the product of
+     * two arbitrary primes.
+     * 
+     * @return an integer representing a hash code for the object.
+     */
+    public int hashCode()
+    {
+        int result = 47 * 13;
+        int equalsFieldsHash = this.toString().hashCode() + 
+                                this.getAddress().hashCode();
+        return result + equalsFieldsHash;
+    }
+    
+    
+    
+    
+     /**
+     * Places owner objects in alphabetical order by last name, with 'a' having
+     * the highest priority.
+     * 
+     * @param aOwner   another owner object to compare the receiver against.
+     * 
+     * @return a positive integer if the receiver comes after the argument, 
+     * negative if it comes before the argument or 0 if they are equal.
+     */
+    @Override
+    public int compareTo(Owner aOwner) throws NullPointerException
+    {
+        //Checks if the argument is null.
+        if(aOwner == null)
+        {
+            throw new NullPointerException("The compareTo argument is null");
+        }
+        
+        //checks for equality.
+        if(this.equals(aOwner))
+        {
+            return 0;
+        }
+        
+        String receiverName = this.getLastName().trim().toLowerCase();
+        String argName = aOwner.getLastName().trim().toLowerCase();
+        int returnValue = 0;
+        
+        //Performs character comparisons on the lastName attribute.
+        for(int i = 0; i < receiverName.length() && i < argName.length(); i++)
+        {
+            if(receiverName.charAt(i) > argName.charAt(i))
+            {
+                returnValue = 1;
+                break;
+            }
+            else if(receiverName.charAt(i) < argName.charAt(i))
+            {
+                returnValue = -1;
+                break;
+            }
+        }
+        
+        //Catches where one string is shorted than the other, but is a substring.
+        if((returnValue == 0) && (receiverName.length() != argName.length()))
+        {
+            returnValue = (receiverName.length() < argName.length()) ? -1 : 1;
+        }
+        
+        return returnValue;
+        
+        
+        
+        
     }
 }

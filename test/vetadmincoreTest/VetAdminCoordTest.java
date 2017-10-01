@@ -12,19 +12,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import vetadmincore.*;
+import java.util.*;
 
 /**
  *
  * @author Adam
  */
-public class PersonTest {
+public class VetAdminCoordTest {
     
-    Person person1;
-    Person person2;
-    Person person3;
-    Person person4;
+    VetAdminCoord admin1;
     
-    public PersonTest() {
+    
+    
+    public VetAdminCoordTest() {
     }
     
     @BeforeClass
@@ -37,20 +37,34 @@ public class PersonTest {
     
     @Before
     public void setUp() {
-        person1 = new Person("Mr", "Buddy", "Holly", "24 Cardigan Way", 
-                                "buddy@dmail.com", "04323444666");
-        person2 = new Person("Miss", "Beyonce", "Knowles", "58 Boogie Down",
-                                "beyonce@shakeyabooty.com", "94534665421");
-        person3 = new Person("Miss", "Beyonce", "Knowles", "58 Boogie Down",
-                                "beyonce@shakeyabooty.com", "94534665421");
-        person4 = null;
     }
     
     @After
     public void tearDown() {
     }
 
-  
-    //*****Tests*****
- 
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
+    
+    
+    
+    /**
+     * Checks that only one VetAdminCoord is ever in existence.
+     */
+    @Test
+    public void getVetAdminCoordTest()
+    {
+        VetAdminCoord vetAdmin = VetAdminCoord.getVetAdminCoord();
+        assert(vetAdmin == VetAdminCoord.getVetAdminCoord()) : 
+                "vetAdmin should share identity with the returned object.";
+        
+    }
+    
+    
+    
+    
+
 }
