@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vetadmincore;
 import java.util.*;
 
 /**
- *
+ * Models an owner of an animal, registered at one or more of the companies
+ * hospitals.
  * @author Adam
  */
 public class Owner implements Comparable<Owner> {
@@ -16,7 +12,7 @@ public class Owner implements Comparable<Owner> {
     private final int iD;
     private Person thePerson;
     private SortedSet<Hospital> hospitals;
-    private SortedSet<Animal> animals;
+    public SortedSet<Animal> animals;
     private SortedSet<Appointment> appointments;
     
     
@@ -282,4 +278,20 @@ public class Owner implements Comparable<Owner> {
         
         
     }
+    
+    
+    
+    /**
+     * Registers a new animal to the owner.
+     * @param aAnimal an animal object to register to the owner.
+     * @return returns true if the animal is successfully added to the receivers
+     * animals sortedSet. Returns false if the animal is already registered to
+     * the owner.
+     */
+    public boolean addAnimal(Animal anAnimal)
+    {
+        return this.animals.add(anAnimal);
+    }
+    
+    
 }

@@ -18,19 +18,21 @@ import java.util.*;
  *
  * @author Adam
  */
-public class OwnerTest {
-    Set<Species> set1;
+public class AnimalTest {
+    Set set1 = new HashSet();
     Hospital hospital1;
+    Hospital hospital2;
     Person person1;
     Person person2;
     Person person3;
     Owner owner1;
     Owner owner2;
-    Owner owner3;
-    Owner owner4;
+    Animal animal1;
+    Animal animal2;
+    Animal animal3;
+    Animal animal4;
     
-    
-    public OwnerTest() {
+    public AnimalTest() {
     }
     
     @BeforeClass
@@ -43,11 +45,9 @@ public class OwnerTest {
     
     @Before
     public void setUp() {
-        set1 = new HashSet<>();
-        set1.add(Species.DOG);
-        set1.add(Species.CAT);
         hospital1 = new Hospital("Burseldon", new TreeSet(), 
                                 set1, 5);
+        hospital2 = new Hospital("York", new TreeSet(), set1, 13);
         person1 = new Person("Mr", "Buddy", "Holly", "24 Cardigan Way", 
                                 "buddy@dmail.com", "04323444666");
         person2 = new Person("Miss", "Beyonce", "Knowles", "58 Boogie Down",
@@ -56,17 +56,24 @@ public class OwnerTest {
                                 "beyonce@shakeyabooty.com", "94534665421");
         owner1 = new Owner(hospital1, person1, false);
         owner2 = new Owner(hospital1, person2, true);
-        owner3 = new Owner(hospital1, person3, true);
-        owner4 = null;
+        animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
+        animal2 = new Animal("Maia", Species.DOG, owner2, hospital1);
+        animal3 = new Animal("Maia", Species.DOG, owner2, hospital2);
+        animal4 = null;
     }
     
     @After
     public void tearDown() {
     }
 
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
     
-    //*****Tests*****
     
+    //****Tests*****
     
     /**
      * Checks that equals works with equal objects.
@@ -74,7 +81,7 @@ public class OwnerTest {
     @Test
     public void equalsEqualArgs()
     {
-        assert(person2.equals(person3)) : "person2 should be equal to person3";
+        assert(animal2.equals(animal3)) : "animal2 should be equal to animal3";
     }
     
     
@@ -86,8 +93,8 @@ public class OwnerTest {
     @Test
     public void equalsUnequalArgs()
     {
-        assertFalse("owner1 should not be equal to owner2", 
-                        owner1.equals(owner2));
+        assertFalse("animal1 should not be equal to animal2", 
+                        animal1.equals(animal2));
     }
     
     
@@ -99,9 +106,8 @@ public class OwnerTest {
     @Test
     public void equalsNull()
     {
-        assertFalse("owner1 should nopt be equal to null", owner1.equals(owner4));
+        assertFalse("animal1 should not be equal to null", animal1.equals(animal4));
     }
-    
     
     
     
@@ -111,8 +117,8 @@ public class OwnerTest {
     @Test
     public void hashCodeEqualArgs()
     {
-        assert(owner2.hashCode() == owner3.hashCode()) : 
-                "owner2's hashCode should be the same as owner3's.";
+        assert(animal2.hashCode() == animal3.hashCode()) : 
+                "animal2's hashCode should be the same as animal3's.";
     }
     
     
@@ -126,63 +132,44 @@ public class OwnerTest {
     {
          person3 = new Person("Miss", "Beyonc", "Knowles", "58 Boogie Down",
                                 "beyonce@shakeyabooty.com", "94534665421");
-         owner3 = new Owner(hospital1, person3, true);
-        assert(owner2.hashCode() != owner3.hashCode()) : 
-                "owner2 should have a different hashCode to owner3";
+         owner2 = new Owner(hospital1, person3, true);
+         animal3 = new Animal("Maia", Species.DOG, owner2, hospital1);
+        assert(animal2.hashCode() != animal3.hashCode()) : 
+                "animal2 should have a different hashCode to animal3";
     }
-    
-    
-    
-    
-     /**
-     * Tests that compareTo works for equal arguments.
-     */
-    @Test
-    public void compareToEqualsArgs()
-    {
-        assert(owner2.compareTo(owner3) == 0) : 
-                "owner2 should be equal to owner3";
-    }
-    
-   
-    
-    
-    /**
-     * Test that compareTo works for unequal arguments.
-     */
-    @Test
-    public void compareToUnequalArgs()
-    {
-        assert(owner1.compareTo(owner2) < 0) : 
-                "owner1 should come after owner2.";
-    }
-    
     
     
     
     /**
-     * Test that compareTo works for similar arguments.
+     * Checks compareTo against equal arguments.
      */
     @Test
+    public void compareToEqualArgs()
+    {
+        assert(animal2.compareTo(animal3) == 0) : 
+                "animal2 should be equal to animal3";
+    }
+    
+    
+    
+    /**
+     * Checks compareTo against similar arguments
+     */
     public void compareToSimilarArgs()
     {
-        person3 = new Person("Miss", "Beyonce", "Knowle", "58 Boogie Down",
-                                "beyonce@shakeyabooty.com", "94534665421");
-        owner3 = new Owner(hospital1, person3, true);
-        assert(owner2.compareTo(owner3) > 0) : 
-                "owner2 should come after owner3.";
+        animal3 = new Animal("Mai", Species.DOG, owner2, hospital1 );
+        assert(animal2.compareTo(animal3) > 0) : 
+                "animal2 should come after animal3";
     }
     
     
     
-    
     /**
-     * Test that the correct exception is thrown when comparing against a null 
-     * argument.
+     * Checks compareTo throws the correct exception.
      */
     @Test(expected = NullPointerException.class)
     public void compareToNull()
     {
-        owner1.compareTo(owner4);
+        animal1.compareTo(animal4);
     }
 }

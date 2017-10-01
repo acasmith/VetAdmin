@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vetadmincore;
 
 /**
- *
+ * A utility class modelling a person in terms of their personal details.
  * @author Adam
  */
 public class Person implements Comparable<Person>{

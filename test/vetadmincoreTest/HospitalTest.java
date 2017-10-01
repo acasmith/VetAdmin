@@ -16,7 +16,7 @@ import vetadmincore.*;
 import java.util.*;
 
 /**
- * Units tests for the Hospital class.
+ * Unit tests for the Hospital class.
  * @author Adam
  */
 public class HospitalTest {
@@ -28,6 +28,14 @@ public class HospitalTest {
             Set<Species> set2 = new HashSet<>();
             Set testSet;
             SortedSet testSortedSet;
+            Person person1;
+            Person person2;
+            Owner owner1;
+            Owner owner2;
+            Animal animal1;
+            Animal animal2;
+            Animal animal3;
+            
     
     public HospitalTest() {
         set1.add(Species.DOG);
@@ -45,13 +53,22 @@ public class HospitalTest {
     
     @Before
     public void setUp() {
-        hospital1 = new Hospital("Burseldon", new HashSet(), 
-                                set1, 5);
-        hospital2 = new Hospital("York", new HashSet(), set2, 13);
-        hospital3 = new Hospital("York", new HashSet(), set2, 13);
-        hospital4 = null;
         testSet = new HashSet();
         testSortedSet = new TreeSet<>();
+        hospital1 = new Hospital("Burseldon", new TreeSet(), 
+                                set1, 5);
+        hospital2 = new Hospital("York", new TreeSet(), set2, 13);
+        hospital3 = new Hospital("York", new TreeSet(), set2, 13);
+        hospital4 = null;
+        person1 = new Person("Mr", "Buddy", "Holly", "24 Cardigan Way", 
+                                "buddy@dmail.com", "04323444666");
+        person2 = new Person("Miss", "Beyonce", "Knowles", "58 Boogie Down",
+                                "beyonce@shakeyabooty.com", "94534665421");
+        owner1 = new Owner(hospital1, person1, false);
+        owner2 = new Owner(hospital1, person2, true);
+        animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
+        animal2 = new Animal("Maia", Species.DOG, owner2, hospital1);
+        animal3 = new Animal("Gonzo", Species.CAT, owner2, hospital1);
         
     }
     
@@ -116,7 +133,7 @@ public class HospitalTest {
     @Test
     public void hashCodeSimilarArgs()
     {
-        hospital3 = new Hospital("Yor", new HashSet(), set2, 13);
+        hospital3 = new Hospital("Yor", new TreeSet(), set2, 13);
         assert(hospital2.hashCode() != hospital3.hashCode()) : 
                 "hospital2 hashCode should not be equal to hospital3";
                     
@@ -154,7 +171,7 @@ public class HospitalTest {
     @Test
     public void compareToSimilarArgs()
     {
-        hospital3 = new Hospital("Yor", new HashSet(), set2, 13);
+        hospital3 = new Hospital("Yor", new TreeSet(), set2, 13);
         assert(hospital3.compareTo(hospital2) < 0) : 
                 "hospital3 should come before hospital 2.";
     }
@@ -169,4 +186,39 @@ public class HospitalTest {
     {
         hospital1.compareTo(hospital4);
     }
+    
+    
+    
+    /**
+     * Checks that getRegisteredAnimals returns all of the animals registered to
+     * the hospital when all owners have animals.
+     */
+    @Test
+    public void getRegisteredAnimalsAverageCase()
+    {
+        testSortedSet.add(animal1); //Create equivalent result set.
+        testSortedSet.add(animal2);
+        testSortedSet.add(animal3);
+        owner1.addAnimal(animal1);  //Register animals with owners.
+        owner2.addAnimal(animal2);
+        owner2.addAnimal(animal3);
+        hospital1.addOwner(owner1); //Register owners with hospital.
+        hospital1.addOwner(owner2);
+        
+        SortedSet<Animal> results = hospital1.getRegisteredAnimals();
+        assert(results.equals(testSortedSet));
+    }
+            
+    
+    
+    /**
+     * Checks getRegisteredAnimals works when all owners have no animals.
+     */
+    
+    
+    
+    /**
+     * Checks getRegisteredAnimals works when the receiver has no registered 
+     * owners.
+     */
 }

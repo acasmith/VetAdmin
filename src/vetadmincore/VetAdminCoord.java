@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vetadmincore;
 import java.util.*;
 
@@ -89,6 +84,30 @@ public class VetAdminCoord {
     {
         return new TreeSet<Owner>(this.owners);
     }
+    
+    
+    
+    /**
+     * Returns all the owners registered at the given hospital.
+     * @return a copy of the hospital's owners sortedSet.
+     */
+    public SortedSet<Owner> getOwners(Hospital aHospital)
+    {
+        return aHospital.getOwners();
+    }
+    
+    
+    
+    
+    /**
+     * Returns all the hospitals the given owner is registered at.
+     * @return a copy of the owners hospitals sorted set.
+     */
+    public SortedSet<Hospital> getOwnersHospitals(Owner anOwner)
+    {
+        return anOwner.getHospitals();
+    }
+    
     
     
     
