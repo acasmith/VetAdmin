@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package vetadmincoreTest;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -14,26 +15,20 @@ import vetadmincore.*;
 import java.util.*;
 
 /**
- * Units tests for the Hospital class.
+ *
  * @author Adam
  */
-public class HospitalTest {
-            Hospital hospital1;
-            Hospital hospital2;
-            Set<Species> set1 = new HashSet<>();
-            Set<Species> set2 = new HashSet<>();
+public class VetAdminCoordTest {
     
-    public HospitalTest() {
-        set1.add(Species.DOG);
-        set1.add(Species.CAT);
-        set2.add(Species.HORSE);
+    VetAdminCoord admin1;
+    
+    
+    
+    public VetAdminCoordTest() {
     }
     
     @BeforeClass
     public static void setUpClass() {
-
-        
-        
     }
     
     @AfterClass
@@ -42,10 +37,6 @@ public class HospitalTest {
     
     @Before
     public void setUp() {
-        hospital1 = new Hospital("Burseldon", new HashSet(), 
-                                set1, 5);
-        hospital2 = new Hospital("York", new HashSet(), set2, 13);
-        
     }
     
     @After
@@ -58,15 +49,22 @@ public class HospitalTest {
     // @Test
     // public void hello() {}
     
+    
+    
     /**
-     * Checks compare to works with two unequal objects.
+     * Checks that only one VetAdminCoord is ever in existence.
      */
     @Test
-    public void compareToGreaterThan()
+    public void getVetAdminCoordTest()
     {
-        SortedSet testSet = new TreeSet<>();
-        testSet.add(hospital1);
-        testSet.add(hospital2);
-        assert(testSet.first() == hospital1);
+        VetAdminCoord vetAdmin = VetAdminCoord.getVetAdminCoord();
+        assert(vetAdmin == VetAdminCoord.getVetAdminCoord()) : 
+                "vetAdmin should share identity with the returned object.";
+        
     }
+    
+    
+    
+    
+
 }

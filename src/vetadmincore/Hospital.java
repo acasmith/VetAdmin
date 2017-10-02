@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package vetadmincore;
 import java.util.*;
 
@@ -16,7 +11,9 @@ public class Hospital implements Comparable<Hospital>{
     private String name;                //Name of the hospital of the hospital.
     private int maxResidents;           //Maximum number of resident animals.
     private Set<Species> typesTreated = new HashSet<Species>();  //Species of animal the hospital can treat.
-    private Set<Staff> staffMembers;    //Collection of staff employed at the hospital.
+    private SortedSet<Staff> staffMembers;    //Collection of staff employed at the hospital.
+    private SortedSet<Owner> owners;    //The owners registered at this hospital.
+    private SortedSet<Resident> residents;  //The animals currently resident in this hospital.
     
     
     
@@ -30,13 +27,15 @@ public class Hospital implements Comparable<Hospital>{
      *                      the hospital.
      * @param maxResidents  the maximum number of resident animals.
      */
-    public Hospital(String name, Set<Staff> staffMembers, 
+    public Hospital(String name, SortedSet<Staff> staffMembers, 
                     Set<Species> typesTreated, int maxResidents)
     {
         this.name = name;
         this.typesTreated = typesTreated;
         this.maxResidents = maxResidents;
         this.staffMembers = staffMembers;
+        this.owners = new TreeSet<>();
+        this.residents = new TreeSet<>();
         
     }
     
@@ -71,6 +70,28 @@ public class Hospital implements Comparable<Hospital>{
     public Set<Species> getTypesTreated()
     {
         return new HashSet<Species>(this.typesTreated);
+    }
+    
+    
+    
+    /**
+     *Returns all of the owners registered at this hospital.
+     * @return a copy of the owners sorted set.
+     */
+    public SortedSet<Owner> getOwners()
+    {
+        return this.owners;
+    }
+    
+    
+    
+    /**
+     * Returns all of the animals resident at the hospital.
+     * @return a copy of the residents sortedSet.
+     */
+    public SortedSet<Resident> getResidents()
+    {
+        return this.residents;
     }
     
     
@@ -152,16 +173,22 @@ public class Hospital implements Comparable<Hospital>{
     
     
     /**
-     * Places hospitals in alphabetical order with 'a' having highest priority.
+     * Places hospitals in alphabetical order by name, with 'a' having highest 
+     * priority.
      * 
-     * @param aHospital
+     * @param aHospital a hospital object to compare against the receiver.
      * 
      * @return an integer indicating whether the receiver is less than, greater
      * than or equal to the argument.
      */
     @Override
-    public int compareTo(Hospital aHospital)
+    public int compareTo(Hospital aHospital) throws NullPointerException
     {
+        if(aHospital == null)
+        {
+            throw new NullPointerException("The compareTo argument is null.");
+        }
+        
         String receiverName = this.getName().trim().toLowerCase();
         String argName = aHospital.getName().trim().toLowerCase();
         int returnValue = 0;
@@ -171,10 +198,10 @@ public class Hospital implements Comparable<Hospital>{
         {
             return returnValue;
         }
-        //Performs character comparisons.
+        //Performs character comparisons on name attributes.
         else
         {
-            for(int i = 0; i < receiverName.length(); i++)
+            for(int i = 0; i < receiverName.length() && i < argName.length(); i++)
             {
                 if(receiverName.charAt(i) < argName.charAt(i))
                 {
@@ -190,11 +217,57 @@ public class Hospital implements Comparable<Hospital>{
         }
         
         /*Catches where one string is shorter than the other, but is also a 
-        substring of the longer string. Shorter comes first. */
+        substring of the longer string. Shorter has priority. */
         if(returnValue == 0)
         {
             returnValue = (receiverName.length() < argName.length()) ? -1 : 1;
         }
         return returnValue;
+    }
+    
+    
+    
+    /**
+     * Registers a new owner with the hospital.
+     * @param aOwner an Owner object.
+     * @return true if the owner was successfully added to the receivers owners
+     * sortedSet. Returns false if the owner is already registered.
+     */
+    public boolean addOwner(Owner anOwner)
+    {
+        return this.owners.add(anOwner);
+    }
+    
+    
+    /**
+     * Returns all of the animals registered to the receiver.
+     * @return a sorted set containing all of the animals registered at the 
+     * hospital.
+     */
+    public SortedSet<Animal> getRegisteredAnimals()
+    {   
+        SortedSet<Animal> results = new TreeSet<>();
+        for(Owner anOwner : this.getOwners())
+        {
+            for(Animal anAnimal : anOwner.getAnimals())
+            {
+                results.add(anAnimal);
+            }
+        }
+        return results;
+    }
+    
+    
+    
+    /**
+     * Assigns a vet to the given animal. The vet chosen is one who works at the
+     * receiver with the fewest assigned animals.
+     */
+    public Vet assignVet(Animal anAnimal)
+    {
+        //TODO
+        ////Remove any existing links between animal and vet before assigning a
+        ////new one.
+        return new Vet();
     }
 }
