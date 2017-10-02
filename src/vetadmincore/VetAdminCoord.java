@@ -11,8 +11,8 @@ public class VetAdminCoord {
     public static int idCounter = 0;    //Used in creation of staff and owner objects.
     
     
-    private SortedSet<Hospital> hospitals;
-    private SortedSet<Owner> owners;
+    private Set<Hospital> hospitals;
+    private Set<Owner> owners;
     
     
     /**
@@ -21,8 +21,8 @@ public class VetAdminCoord {
      */
     private VetAdminCoord()
     {
-        this.hospitals = new TreeSet<>();
-        this.owners = new TreeSet<>();
+        this.hospitals = new HashSet<>();
+        this.owners = new HashSet<>();
     }
     
     
@@ -66,11 +66,11 @@ public class VetAdminCoord {
     
     /**
      * Returns the hospitals within the business.
-     * @return returns a copy of the hospitals sorted set 
+     * @return returns a copy of the hospitals  set 
      */
-    public SortedSet<Hospital> getHospitals()
+    public Set<Hospital> getHospitals()
     {
-        return new TreeSet<Hospital>(this.hospitals);
+        return new HashSet<Hospital>(this.hospitals);
     }
     
     
@@ -78,20 +78,20 @@ public class VetAdminCoord {
     
     /**
      * Returns the hospitals within the business.
-     * @return returns a copy of the hospitals sorted set 
+     * @return returns a copy of the hospitals  set 
      */
-    public SortedSet<Owner> getOwners()
+    public Set<Owner> getOwners()
     {
-        return new TreeSet<Owner>(this.owners);
+        return new HashSet<Owner>(this.owners);
     }
     
     
     
     /**
      * Returns all the owners registered at the given hospital.
-     * @return a copy of the hospital's owners sortedSet.
+     * @return a copy of the hospital's owners Set.
      */
-    public SortedSet<Owner> getOwners(Hospital aHospital)
+    public Set<Owner> getOwners(Hospital aHospital)
     {
         return aHospital.getOwners();
     }
@@ -101,11 +101,105 @@ public class VetAdminCoord {
     
     /**
      * Returns all the hospitals the given owner is registered at.
-     * @return a copy of the owners hospitals sorted set.
+     * @return a copy of the owners hospitals  set.
      */
-    public SortedSet<Hospital> getOwnersHospitals(Owner anOwner)
+    public Set<Hospital> getOwnersHospitals(Owner anOwner)
     {
         return anOwner.getHospitals();
+    }
+    
+    
+    
+    
+    /**
+     * Returns all of the staff employed at aHospital.
+     * @param aHospital a hospital object.
+     * @return a copy of the arguments staffMembers Set.
+     */
+    public Set<Staff> getStaff(Hospital aHospital)
+    {
+        return aHospital.getStaff();
+    }
+    
+    
+    
+    /**
+     * Returns all of the treated residents at aHospital.
+     * @return a set containing all resident objects with true treated attribute 
+     * value linked to aHospital.
+     */
+    public Set<Resident> getTreatedResidents(Hospital aHospital)
+    {
+        return aHospital.getTreatedResidents();
+    }
+    
+    
+    
+    /**
+     * Returns all of the untreated residents at aHospital.
+     * @return a set containing all resident objects with false treated attribute 
+     * value linked to aHospital.
+     */
+    public Set<Resident> getUntreatedResidents(Hospital aHospital)
+    {
+        return aHospital.getUntreatedResidents();
+    }
+    
+    /**
+     * Returns all of the vets employed at aHospital.
+     * @param aHospital a hospital object.
+     * @return all of the Vet objects linked to aHospital.
+     */
+    public Set<Vet> getVets(Hospital aHospital)
+    {
+        return aHospital.getVets();
+    }
+    
+    
+    /**
+     * Returns all of the nurses employed at aHospital.
+     * @param aHospital a hospital object.
+     * @return all of the Nurse objects linked to aHospital.
+     */
+    public Set<Nurse> getNurses(Hospital aHospital)
+    {
+        return aHospital.getNurses();
+    }
+    
+    
+    
+    /**
+     * Records the treatment of aResident.
+     * @param aResident a Resident object.
+     * @return a boolean value representing whether the recording was successful.
+     */
+    public boolean recordTreatment(Resident aResident)
+    {
+        return aResident.recordTreatment();
+    }
+    
+    
+    /**
+     * Returns all of the animals registered at aHospital.
+     * @param aHospital a hospital object.
+     * @return a set containing all animal objects with aHospital hospital 
+     * attribute value.
+     */
+    public Set<Animal> getRegisteredAnimals(Hospital aHospital)
+    {
+        return aHospital.getRegisteredAnimals();
+    }
+    
+    
+    
+    /**
+     * Returns all aHospitals residents.
+     * @param aHospital a hospital object.
+     * @return a copy of aHospitals residents set.
+     */
+    public Set<Resident> getResidents(Hospital aHospital)
+    {
+        return aHospital.getResidents();
     }
     
     

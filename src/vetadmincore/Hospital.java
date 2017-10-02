@@ -11,9 +11,9 @@ public class Hospital implements Comparable<Hospital>{
     private String name;                //Name of the hospital of the hospital.
     private int maxResidents;           //Maximum number of resident animals.
     private Set<Species> typesTreated = new HashSet<Species>();  //Species of animal the hospital can treat.
-    private SortedSet<Staff> staffMembers;    //Collection of staff employed at the hospital.
-    private SortedSet<Owner> owners;    //The owners registered at this hospital.
-    private SortedSet<Resident> residents;  //The animals currently resident in this hospital.
+    public  Set<Staff> staffMembers;    //Collection of staff employed at the hospital.
+    private Set<Owner> owners;    //The owners registered at this hospital.
+    private Set<Resident> residents;  //The animals currently resident in this hospital.
     
     
     
@@ -27,15 +27,15 @@ public class Hospital implements Comparable<Hospital>{
      *                      the hospital.
      * @param maxResidents  the maximum number of resident animals.
      */
-    public Hospital(String name, SortedSet<Staff> staffMembers, 
+    public Hospital(String name, Set<Staff> staffMembers, 
                     Set<Species> typesTreated, int maxResidents)
     {
         this.name = name;
         this.typesTreated = typesTreated;
         this.maxResidents = maxResidents;
         this.staffMembers = staffMembers;
-        this.owners = new TreeSet<>();
-        this.residents = new TreeSet<>();
+        this.owners = new HashSet<>();
+        this.residents = new HashSet<>();
         
     }
     
@@ -76,9 +76,9 @@ public class Hospital implements Comparable<Hospital>{
     
     /**
      *Returns all of the owners registered at this hospital.
-     * @return a copy of the owners sorted set.
+     * @return a copy of the owners  set.
      */
-    public SortedSet<Owner> getOwners()
+    public Set<Owner> getOwners()
     {
         return this.owners;
     }
@@ -87,9 +87,9 @@ public class Hospital implements Comparable<Hospital>{
     
     /**
      * Returns all of the animals resident at the hospital.
-     * @return a copy of the residents sortedSet.
+     * @return a copy of the residents Set.
      */
-    public SortedSet<Resident> getResidents()
+    public Set<Resident> getResidents()
     {
         return this.residents;
     }
@@ -189,40 +189,10 @@ public class Hospital implements Comparable<Hospital>{
             throw new NullPointerException("The compareTo argument is null.");
         }
         
-        String receiverName = this.getName().trim().toLowerCase();
-        String argName = aHospital.getName().trim().toLowerCase();
-        int returnValue = 0;
-        
-        //Catches equality
-        if(receiverName.equals(argName))
-        {
-            return returnValue;
-        }
-        //Performs character comparisons on name attributes.
-        else
-        {
-            for(int i = 0; i < receiverName.length() && i < argName.length(); i++)
-            {
-                if(receiverName.charAt(i) < argName.charAt(i))
-                {
-                    returnValue = -1;
-                    break;
-                }
-                else if(receiverName.charAt(i) > argName.charAt(i))
-                {
-                    returnValue = 1;
-                    break;
-                }
-            }
-        }
-        
-        /*Catches where one string is shorter than the other, but is also a 
-        substring of the longer string. Shorter has priority. */
-        if(returnValue == 0)
-        {
-            returnValue = (receiverName.length() < argName.length()) ? -1 : 1;
-        }
+        //COmparison on name.
+        int returnValue = this.getName().compareTo(aHospital.getName());
         return returnValue;
+        
     }
     
     
@@ -231,7 +201,7 @@ public class Hospital implements Comparable<Hospital>{
      * Registers a new owner with the hospital.
      * @param aOwner an Owner object.
      * @return true if the owner was successfully added to the receivers owners
-     * sortedSet. Returns false if the owner is already registered.
+     * Set. Returns false if the owner is already registered.
      */
     public boolean addOwner(Owner anOwner)
     {
@@ -239,19 +209,23 @@ public class Hospital implements Comparable<Hospital>{
     }
     
     
+    
     /**
      * Returns all of the animals registered to the receiver.
-     * @return a sorted set containing all of the animals registered at the 
+     * @return a  set containing all of the animals registered at the 
      * hospital.
      */
-    public SortedSet<Animal> getRegisteredAnimals()
+    public Set<Animal> getRegisteredAnimals()
     {   
-        SortedSet<Animal> results = new TreeSet<>();
+        Set<Animal> results = new HashSet<>();
         for(Owner anOwner : this.getOwners())
         {
             for(Animal anAnimal : anOwner.getAnimals())
             {
-                results.add(anAnimal);
+                if(anAnimal.getHospital().equals(this))
+                {
+                    results.add(anAnimal);
+                }
             }
         }
         return results;
@@ -260,14 +234,124 @@ public class Hospital implements Comparable<Hospital>{
     
     
     /**
+     * Returns all of the staff members employed at the hospital.
+     * @return a copy of the receivers staffMembers  set.
+     */
+    public Set<Staff> getStaff()
+    {
+        return new HashSet<>(this.staffMembers);
+    }
+    
+    
+    
+    /**
+     * Returns all of the treated residents at the hospital.
+     * @return a set containing all of the resident objects in residents with a
+     * true treated attribute.
+     */
+    public Set<Resident> getTreatedResidents()
+    {
+        Set<Resident> results = new HashSet<>();
+        
+        for(Resident aResident : this.getResidents())
+        {
+            if(aResident.hasBeenTreated())
+            {
+                results.add(aResident);
+            }
+        }
+        
+        return results;
+    }
+    
+    
+    
+     /**
+     * Returns all of the untreated residents at the hospital.
+     * @return a set containing all of the resident objects in residents with a
+     * false treated attribute.
+     */
+    public Set<Resident> getUntreatedResidents()
+    {
+        Set<Resident> results = new HashSet<>();
+        
+        for(Resident aResident : this.getResidents())
+        {
+            if(!aResident.hasBeenTreated())
+            {
+                results.add(aResident);
+            }
+        }
+        
+        return results;
+    }
+    
+    
+    
+    /**
+     * Returns all of the vets employed at the hospital.
+     * @return a set containing all of the Vet objects within staffMembers.
+     */
+    public Set<Vet> getVets()
+    {
+        Set<Vet> results = new HashSet<>();
+        for(Staff aStaff : this.getStaff())
+        {
+            if(aStaff instanceof Vet)
+            {
+                results.add((Vet)aStaff);
+            }
+        }
+        return results;
+    }
+    
+    
+    
+    /**
+     * Returns all of the nurses employed at the hospital.
+     * @return a set containing all of the Nurse objects within staffMembers.
+     */
+    public Set<Nurse> getNurses()
+    {
+        Set<Nurse> results = new HashSet<>();
+        for(Staff aStaff : this.getStaff())
+        {
+            if(aStaff instanceof Nurse)
+            {
+                results.add((Nurse)aStaff);
+            }
+        }
+        return results;
+    }
+    
+    
+    
+    //TODO
+    /**
      * Assigns a vet to the given animal. The vet chosen is one who works at the
      * receiver with the fewest assigned animals.
      */
-    public Vet assignVet(Animal anAnimal)
+    /**public Vet assignVet(Animal anAnimal)
     {
         //TODO
         ////Remove any existing links between animal and vet before assigning a
         ////new one.
         return new Vet();
+    }**/
+    
+    
+    
+    //STUB*************
+    public boolean addResident(Resident aResident)
+    {
+        return this.residents.add(aResident);
+    }
+    
+    
+    //STUB*******
+    public boolean addStaff(Staff aStaff)
+    {
+        this.staffMembers.add(aStaff);
+        return true;
     }
 }

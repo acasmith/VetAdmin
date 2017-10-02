@@ -10,6 +10,7 @@ public class Animal implements Comparable<Animal>{
     private Species species;            //The animals species.
     private Owner owner;                //The animals owner.
     private Vet assignedVet;            //The vet assigned to the animal.
+    private Hospital hospital;          //The hospital the animal is registered at.
     
     
     /**
@@ -25,6 +26,18 @@ public class Animal implements Comparable<Animal>{
         this.name = name;
         this.species = species;
         this.owner = owner;
+        this.hospital = registeredHospital;
+    }
+    
+    
+    
+    /**
+     * Returns the hospital the animal is registered at.
+     * @return the hospital object linked to the receiver.
+     */
+    public Hospital getHospital()
+    {
+        return this.hospital;
     }
     
     
