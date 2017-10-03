@@ -1,4 +1,5 @@
 package vetadmincore;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -91,7 +92,7 @@ public class Hospital implements Comparable<Hospital>{
      */
     public Set<Resident> getResidents()
     {
-        return this.residents;
+        return new HashSet<Resident>(this.residents);
     }
     
     
@@ -326,6 +327,18 @@ public class Hospital implements Comparable<Hospital>{
     
     
     
+    /**
+     * Returns whether or not the hospital is currently full.
+     * @return a boolean value representing whether or not the size of residents
+     * is greater than the value of maxResidents.
+     */
+    public boolean isFull()
+    {
+        return this.getResidents().size() >= this.getMaxResidents();
+    }
+    
+    
+    
     //TODO
     /**
      * Assigns a vet to the given animal. The vet chosen is one who works at the
@@ -341,17 +354,57 @@ public class Hospital implements Comparable<Hospital>{
     
     
     
-    //STUB*************
-    public boolean addResident(Resident aResident)
+   /**
+    * If the resident is of a species the hospital can treat and the hospital is
+    * not full then the resident is recorded.
+    * @param aResident a resident object.
+    * @return boolean value indicating whether or not the addition was successful.
+    */ 
+    public boolean addResident(Animal anAnimal, LocalDate admissionDate, 
+                                String illness, boolean isTreated)
     {
-        return this.residents.add(aResident);
+        if(this.typesTreated.contains(anAnimal.getSpecies()) &&
+                !this.isFull())
+        {
+            return this.residents.add(new Resident(anAnimal, this, admissionDate,
+                                        illness, isTreated));
+        }
+        return false;
     }
     
     
-    //STUB*******
+    /**
+     * Removes a staff members links to any other hospital and adds them to the 
+     * hospital.
+     * @param aStaff a Staff object.
+     * @return a boolean value indicating if the staff member
+     */
     public boolean addStaff(Staff aStaff)
     {
-        this.staffMembers.add(aStaff);
-        return true;
+        return this.staffMembers.add(aStaff);
+    }
+    
+    
+    
+    /**
+     * Removes and links between the receiver and aStaff
+     * @param aStaff a Staff object.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeStaff(Staff aStaff)
+    {
+        return this.getStaff().remove(aStaff);
+    }
+    
+    
+    
+    /**
+     * Removes aResident from the hospitals residents set.
+     * @param aResident a resident object.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeResident(Resident aResident)
+    {
+        return this.residents.remove(aResident);
     }
 }

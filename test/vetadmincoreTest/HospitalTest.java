@@ -40,12 +40,14 @@ public class HospitalTest {
             Animal animal4;
             Animal animal5;
             Animal animal6;
+            Animal animal7;
             Resident resident1;
             Resident resident2;
             Resident resident3;
             Resident resident4;
             Resident resident5;
             Resident resident6;
+            Resident resident7;
             Staff staff1;
             Vet vet1;
             Nurse nurse1;
@@ -85,15 +87,17 @@ public class HospitalTest {
         animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
         animal2 = new Animal("Maia", Species.DOG, owner2, hospital1);
         animal3 = new Animal("Gonzo", Species.CAT, owner2, hospital1);
-        animal4 = new Animal("Tiki", Species.BIRD, owner2, hospital1);
+        animal4 = new Animal("Tiki", Species.DOG, owner2, hospital1);
         animal5 = new Animal("Dusty", Species.CAT, owner1, hospital1);
         animal6 = new Animal("Maisy", Species.HORSE, owner1, hospital1);
+        animal7 = new Animal("Milo", Species.DOG, owner1, hospital1);
         resident1 = new Resident(animal1, hospital1, LocalDate.of(2020, 12, 12), "Sore paw", true);
         resident2 = new Resident(animal2, hospital1, LocalDate.of(2020, 12, 11), "Too cute", false);
         resident3 = new Resident(animal3, hospital1, LocalDate.of(2020, 11, 29), "Uber fluffy", true);
         resident4 = new Resident(animal4, hospital1, LocalDate.of(2020, 7, 30), "Cuddle addict", false);
         resident5 = new Resident(animal5, hospital1, LocalDate.of(2020, 4, 17), "Ate too much", true);
         resident6 = new Resident(animal6, hospital1, LocalDate.of(2020, 2, 23), "Very sleepy", true);
+        resident7 = new Resident(animal7, hospital1, LocalDate.of(2020, 2, 12), "Sings in the shower", true);
         staff1 = new Staff(person1, hospital1);
         vet1 = new Vet(person2, hospital1, "MSc");
         nurse1 = new Nurse(person3, hospital1, "PhD", vet1);
@@ -276,8 +280,8 @@ public class HospitalTest {
     @Test
     public void getTreatedResidentsAverageCase()
     {
-        hospital1.addResident(resident1);   //USES STUB!!!!Make sure to replace.
-        hospital1.addResident(resident2);   //USES STUB!!!!Make sure to replace.
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
         testSet.add(resident1);
         assert(hospital1.getTreatedResidents().equals(testSet)) : 
                 "Only resident1 should be returned by the method.";
@@ -290,7 +294,7 @@ public class HospitalTest {
     @Test
     public void getTreatedResidentsNoTreated()
     {
-        hospital1.addResident(resident2);   //USES STUB!! Makes sure to replace.
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
         assert(testSet.equals(hospital1.getTreatedResidents())) : 
                 "No residents should be returned";
     }
@@ -318,8 +322,8 @@ public class HospitalTest {
     @Test 
     public void getUntreatedResidentsAverageCase()
     {
-        hospital1.addResident(resident1);   //<--USES STUB!!!!Make sure to replace.
-        hospital1.addResident(resident2);   //<--USES STUB!!!!Make sure to replace.
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
         testSet.add(resident2);
         assert(hospital1.getUntreatedResidents().equals(testSet)) : 
                 "Only resident2 should be returned by the method.";
@@ -332,7 +336,7 @@ public class HospitalTest {
     @Test
     public void getUntreatedResidentsNoTreated()
     {
-        hospital1.addResident(resident1);   //<--USES STUB!! Makes sure to replace.
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
         assert(testSet.equals(hospital1.getUntreatedResidents())) : 
                 "No residents should be returned";
     }
@@ -444,11 +448,12 @@ public class HospitalTest {
     @Test
     public void addResidentAverageCase()
     {
-        hospital1.addResident(resident1);
-        hospital1.addResident(resident2);
-        hospital1.addResident(resident3);
-        hospital1.addResident(resident4);
-        assert(hospital1.addResident(resident5)) : "Should return true";
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
+        hospital1.addResident(animal3, LocalDate.of(2020, 11, 29), "Uber fluffy", true);
+        hospital1.addResident(animal4, LocalDate.of(2020, 7, 30), "Cuddle addict", false);
+        //System.out.println(hospital1.getResidents());
+        assert(hospital1.addResident(animal5, LocalDate.of(2020, 4, 17), "Ate too much", true)) : "Should return true";
         assert(hospital1.getResidents().contains(resident5)) : 
                 "hospital1's residents should contain resident 5";
     }
@@ -461,13 +466,13 @@ public class HospitalTest {
     @Test
     public void addResidentHospitalFull()
     {
-        hospital1.addResident(resident1);
-        hospital1.addResident(resident2);
-        hospital1.addResident(resident3);
-        hospital1.addResident(resident4);
-        hospital1.addResident(resident5);
-        assert(!hospital1.addResident(resident6)) : "Should return false";
-        assert(!hospital1.getResidents().contains(resident6)) : 
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
+        hospital1.addResident(animal3, LocalDate.of(2020, 11, 29), "Uber fluffy", true);
+        hospital1.addResident(animal4, LocalDate.of(2020, 7, 30), "Cuddle addict", false);
+        hospital1.addResident(animal5, LocalDate.of(2020, 4, 17), "Ate too much", true);
+        assert(!hospital1.addResident(animal7, LocalDate.of(2020, 2, 12), "Sings in the shower", true)) : "Should return false";
+        assert(!hospital1.getResidents().contains(resident7)) : 
                 "hospital1's residents should not contain resident 6";
     }
     
@@ -476,4 +481,109 @@ public class HospitalTest {
     /**
      * Checks addResident() works when the resident is of the wrong species.
      */
+    @Test
+    public void addResidentWrongSpecies()
+    {
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
+        hospital1.addResident(animal3, LocalDate.of(2020, 11, 29), "Uber fluffy", true);
+        assert(!hospital1.addResident(animal6, LocalDate.of(2020, 2, 23), "Very sleepy", true)) : "Should return false";
+        assert(!hospital1.getResidents().contains(6)) : 
+                "hospital1's residents should not contain resident6";
+        
+    }
+    
+    
+    
+    /**
+     * Checks that remove resident works when the resident is present.
+     */
+    @Test
+    public void removeResidentPresent()
+    {
+        assert(hospital1.getResidents().isEmpty()) : "hospital1 should have no residents at the start.";
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
+        hospital1.addResident(animal3, LocalDate.of(2020, 11, 29), "Uber fluffy", true);
+        Set<Resident> residentSet = (hospital1.getResidents());
+        for(Resident aResident : residentSet)
+        {
+            assert(hospital1.getResidents().contains(aResident)) : "hospital1 residents should contain aResident.";
+            assert(hospital1.removeResident(aResident)) : 
+                    "aResident should be removed from hospital1's residents";
+        }
+        assert(hospital1.getResidents().isEmpty()) : "hospital1 should have no residents at the end";
+        
+    }
+    
+    
+    
+    
+    /**
+     * Checks that removeResident works when the resident is not present.
+     */
+        @Test
+    public void removeResidentNotPresent()
+    {
+        assert(hospital1.getResidents().isEmpty()) : "hospital1 should have no residents at the start.";
+        hospital1.addResident(animal1, LocalDate.of(2020, 12, 12), "Sore paw", true);
+        hospital1.addResident(animal2, LocalDate.of(2020, 12, 11), "Too cute", false);
+        hospital1.addResident(animal3, LocalDate.of(2020, 11, 29), "Uber fluffy", true);
+        Set<Resident> residentSet = new HashSet<>();
+        residentSet.add(new Resident(animal4, hospital1, LocalDate.of(2020, 7, 30), "Cuddle addict", false));
+        for(Resident aResident : residentSet)
+        {
+            assert(!hospital1.getResidents().contains(aResident)) : "hospital1 residents should not contain aResident.";
+            assert(!hospital1.removeResident(aResident)) : 
+                    "aResident should not be removed from hospital1's residents because it was never there";
+        }
+        
+    }
+    
+    
+    
+    
+    /**
+     * Checks addStaff works with a staff member linked to another hospital.
+     */
+    @Test
+    public void addStaffLinked()
+    {
+        assert(staff1.getHospital().equals(hospital1)) : "staff1 should be employed at hospital1";
+        assert(hospital2.addStaff(staff1)) : "Should return true.";
+        assert(hospital2.getStaff().contains(staff1)) : "hospital1's staffMembers set should contain staff1";
+    }
+    
+    
+    
+    /**
+     * Checks addStaff works with a staff member is already linked to the hospital.
+     */
+    @Test
+    public void addStaffAlreadyLinked()
+    {
+        assert(staff1.getHospital().equals(hospital1)) : "staff1 should be employed at hospital1";
+        hospital1.addStaff(staff1);
+        assert(hospital1.getStaff().size() == 1 && 
+                hospital1.getStaff().contains(staff1)) :
+                "hospital1 should only employ staff1";
+        assert(!hospital1.addStaff(staff1)) : "Staff 1 should not be added as it's already there";
+        assert(hospital1.getStaff().size() == 1 && 
+                hospital1.getStaff().contains(staff1)) :
+                "hospital1 should only employ staff1 at the end";
+    }
+    
+    
+    
+    /**
+     * Checks removeStaff works when the staff member is not employed there.
+     */
+    @Test
+    public void removeStaffNoLink()
+    {
+        assert(!hospital2.getStaff().contains(staff1)) : 
+                "staff1 should not be employed at hospital2";
+        assert(!hospital2.removeStaff(staff1)) : 
+                "staff1 should not be removed as it is not present";
+    }
 }

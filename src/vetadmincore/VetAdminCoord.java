@@ -1,4 +1,5 @@
 package vetadmincore;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -202,6 +203,111 @@ public class VetAdminCoord {
         return aHospital.getResidents();
     }
     
+    
+    
+    /**
+     * If the resident is of a species the hospital can treat, and the hospital
+     * is not full the resident is recorded.
+     * @param aHospital a hospital object.
+     * @param aResident a resident object.
+     * @return a boolean value indicating whether the addition was successful.
+     */
+    public boolean addResident(Animal anAnimal, Hospital aHospital, 
+                                LocalDate admissionDate, String illness,
+                                boolean isTreated)
+    {
+        return aHospital.addResident(anAnimal, admissionDate, illness, isTreated);
+    }
+    
+    
+    
+    /**
+     * Removes any existing links between the staff member and any other hospital
+     * and adds the staff member to aHospital.
+     * @param aHospital a hospital object.
+     * @param aStaff a staff object.
+     * @return a boolean value indicating if the addition was successful.
+     */
+    public boolean addStaff(Hospital aHospital, Staff aStaff)
+    {
+        if(aHospital.addStaff(aStaff))
+        {
+            if(aStaff.getHospital() == null)
+            {
+                aStaff.getHospital().removeStaff(aStaff);
+            
+            }
+            return aStaff.setHospital(aHospital);
+        }
+        return false;
+    }
+    
+    
+    
+    /**
+     * Removes any links between aHospital and aStaff.
+     * @param aHospital a Hospital object.
+     * @param aStaff a Staff object.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeStaff(Hospital aHospital, Staff aStaff)
+    {
+        return aHospital.removeStaff(aStaff);
+    }
+    
+    
+    
+    /**
+     * Removes a resident from aHospitals residents collection.
+     * @param aHospital a hospital object.
+     * @param aResident a resident object.
+     * @return a boolean value indicating whether the removal was successful.
+     */
+    public boolean removeResident(Hospital aHospital, Resident aResident)
+    {
+        return aHospital.removeResident(aResident);
+    }
+    
+    
+    
+    /**
+     * Adds a new hospital to the system. The hospital must have a name, at least
+     * 5 staff, be able to treat at least 1 species of animal and be able to house
+     * at least 1 resident.
+     * @param name the name of the hospital.
+     * @param staffSet a set of staff employed at the hospital.
+     * @param speciesSet the set of species the hospital can treat.
+     * @param maxResidents the maximum number of residents the hospital can take.
+     * @return a boolean value indicating if the addition was successful.
+     */
+    public boolean addHospital(String name, Set<Staff> staffSet, 
+                                Set<Species> speciesSet, int maxResidents)
+    {
+        if(!name.equals("") && 
+                staffSet.size() > 4 &&
+                speciesSet.size() > 1 &&
+                maxResidents > 0)
+        {
+            return this.hospitals.add(new Hospital(name, staffSet, speciesSet,
+                                            maxResidents));
+        }
+        return false;
+    }
+    
+    
+    
+    
+    /**
+     * Removes the given hospital from the system.
+     * @param aHospital a hospital object.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeHospital(Hospital aHospital)
+    {
+        return this.hospitals.remove(aHospital);
+    }
+            
+            
     
     
     

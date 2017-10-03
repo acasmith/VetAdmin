@@ -214,6 +214,19 @@ public class Staff implements Comparable<Staff>{
     
     
     
+    /**
+     * Sets the hospital the staff member works at.
+     * @param aHospital a hospital object.
+     * @return a boolean value indicating the success of the change.
+     */
+    public boolean setHospital(Hospital aHospital)
+    {
+        this.hospital = aHospital;
+        return true;
+    }
+    
+    
+    
     
     
     
