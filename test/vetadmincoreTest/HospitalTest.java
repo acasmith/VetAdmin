@@ -7,6 +7,7 @@ package vetadmincoreTest;
  */
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -28,12 +29,14 @@ public class HospitalTest {
             Hospital hospital4;
             Set<Species> set1 = new HashSet<>();
             Set<Species> set2 = new HashSet<>();
+            Set<Staff> staffSet;
             Set testSet;
             Person person1;
             Person person2;
             Person person3;
             Owner owner1;
             Owner owner2;
+            Owner owner3;
             Animal animal1;
             Animal animal2;
             Animal animal3;
@@ -50,7 +53,9 @@ public class HospitalTest {
             Resident resident7;
             Staff staff1;
             Vet vet1;
+            Vet vet2;
             Nurse nurse1;
+            Appointment appointment1;
             
     
     public HospitalTest() {
@@ -69,13 +74,13 @@ public class HospitalTest {
     
     @Before
     public void setUp() {
-        testSet = new HashSet();
         testSet = new HashSet<>();
-        hospital1 = new Hospital("Burseldon", new HashSet(), 
+        staffSet = new HashSet<>();
+        hospital1 = new Hospital("Burseldon", staffSet, 
                                 set1, 5);
-        hospital2 = new Hospital("York", new HashSet(), set2, 13);
-        hospital3 = new Hospital("York", new HashSet(), set2, 13);
-        hospital4 = null;
+        hospital2 = new Hospital("York", staffSet, set2, 13);
+        hospital3 = new Hospital("York", staffSet, set2, 13);
+        
         person1 = new Person("Mr", "Buddy", "Holly", "24 Cardigan Way", 
                                 "buddy@dmail.com", "04323444666");
         person2 = new Person("Miss", "Beyonce", "Knowles", "58 Boogie Down",
@@ -84,6 +89,7 @@ public class HospitalTest {
                                 "dana@hooya.com", "84302345802");
         owner1 = new Owner(hospital1, person1, false);
         owner2 = new Owner(hospital1, person2, true);
+        owner3 = new Owner(hospital1, person3, false);
         animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
         animal2 = new Animal("Maia", Species.DOG, owner2, hospital1);
         animal3 = new Animal("Gonzo", Species.CAT, owner2, hospital1);
@@ -99,8 +105,10 @@ public class HospitalTest {
         resident6 = new Resident(animal6, hospital1, LocalDate.of(2020, 2, 23), "Very sleepy", true);
         resident7 = new Resident(animal7, hospital1, LocalDate.of(2020, 2, 12), "Sings in the shower", true);
         staff1 = new Staff(person1, hospital1);
-        vet1 = new Vet(person2, hospital1, "MSc");
         nurse1 = new Nurse(person3, hospital1, "PhD", vet1);
+        vet1 = new Vet(person2, hospital1, "MSc");
+        vet2 = new Vet(person3, hospital1, "BSc");
+        hospital4 = null;
         
     }
     
@@ -392,6 +400,7 @@ public class HospitalTest {
     @Test
     public void getVetsNoStaff()
     {
+        System.out.println(hospital1.getVets().size());
         assert(testSet.equals(hospital1.getVets())) : 
                 "An empty set should be returned.";
     }
@@ -585,5 +594,215 @@ public class HospitalTest {
                 "staff1 should not be employed at hospital2";
         assert(!hospital2.removeStaff(staff1)) : 
                 "staff1 should not be removed as it is not present";
+    }
+    
+    
+    
+    /**
+     * Checks assignVet assigns the vet with the lowest assigned animals when
+     * there is one viable candidate.
+     */
+    @Test
+    public void assignVetAverageCase()
+    {
+        vet1.addAnimal(animal1);
+        hospital1.addStaff(vet1);
+        hospital1.addStaff(vet2);
+        assert(hospital1.assignVet(animal2) == vet2) : "assignVet should return vet2";
+        assert(vet2.getAssignedAnimals().contains(animal2) && 
+                vet2.getAssignedAnimals().size()== 1) :
+                "vet2 should be assigned only to animal2";
+    }
+    
+    
+    
+    /**
+     * Checks assignVet assigns a vet with the lowest assigned animals when
+     * more than one vet is more than one viable candidate.
+     */
+    @Test
+    public void assignVetMultipleOptions()
+    {
+        vet1.addAnimal(animal1);
+        vet2.addAnimal(animal2);
+        hospital1.addStaff(vet1);
+        hospital1.addStaff(vet2);
+        Vet assignedVet = hospital1.assignVet(animal3);
+        assert(assignedVet == vet1 || assignedVet == vet2) : 
+                "the assigned vet should be either vet1 or vet2";
+        assert(assignedVet.getAssignedAnimals().size() == 2 &&
+                assignedVet.getAssignedAnimals().contains(animal3)) :
+                "the assignedVet should be assigned animal3 and 1 other only";
+        
+    }
+    
+    
+    /**
+     * Checks assignVet works correctly when there are no vets to assign.
+     */
+    @Test
+    public void assignVetNoVets()
+    {
+        assert(hospital1.assignVet(animal1) == null) : "null should be returned";
+        assert(animal1.getAssignedVet() == null) : "animal1 should not have any vet assigned";
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Checks addAppointment works when both the animals assigned vet and the 
+     * owner have no other appointments at that date and time.
+     */
+    @Test
+    public void addAppointmentAverageCase()
+    {
+        hospital1.addStaff(vet1);
+        animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
+        owner1.addAnimal(animal1);
+        appointment1 = new Appointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal1, animal1.getAssignedVet());
+        assert(owner1.getAppointments().isEmpty()) : "owner1 should have no appointments";
+        assert(vet1.getAppointments().isEmpty()) : "vet1 should have no appointments";
+        assert(hospital1.addAppointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal1)) : "A new appointment should be made.";
+        assert(vet1.getAppointments().size() == 1 && vet1.getAppointments().contains(appointment1)) :
+                "vet1 should have appointment1 as it's only appointment.";
+        assert(owner1.getAppointments().size() == 1 && owner1.getAppointments().contains(appointment1)) :
+                "owner1 should have appointment1 as it's only appointment.";
+        
+        
+    }
+    
+    
+    
+    /**
+     * Checks addAppointment works when the animals assigned vet is unavailable,
+     * so another vet must be found.
+     */
+    @Test
+    public void addAppointmentAssignedVetUnavailable()
+    {
+        //Add animals whilst there's only 1 vet to choose from.
+        hospital1.addStaff(vet1);   
+        owner1.addAnimal(animal1);
+        owner2.addAnimal(animal2);
+        animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
+        animal2 = new Animal("Maia", Species.DOG, owner2, hospital1);
+        
+        //Ensure vet1 has an appointment to clash with.
+        hospital1.addAppointment(LocalDate.of(2020, 5, 14),
+                LocalTime.of(9,0), animal1);
+        
+        //Add second vet
+        hospital1.addStaff(vet2);   
+        
+        //Create the appointment that should be made to compare results against.
+        appointment1 = new Appointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal2, vet2);
+        
+        //Tests
+        assert(vet1.getAppointments().size() == 1) : 
+                "vet1 should have 1 appointment at the start";
+        assert(vet2.getAppointments().isEmpty()) : 
+                "vet2 should have no appointments at the start";
+        assert(owner2.getAppointments().isEmpty()) :
+                "owner2 should have no appointments at the start";
+        assert(hospital1.addAppointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal2)) : 
+                "A new appointment should be made.";
+        assert(vet2.getAppointments().size() == 1 && vet2.getAppointments().contains(appointment1)) :
+                "vet2 should have appointment1 as it's only appointment.";
+        assert(owner2.getAppointments().size() == 1 && owner2.getAppointments().contains(appointment1)) :
+                "owner2 should have appointment1 as it's only appointment.";
+    }
+    
+    
+    
+    /**
+     * Checks addAppointment works when no vet is available for the appointment.
+     */
+    @Test
+    public void addAppointmentNoVetAvailable()
+    {
+        //Assign all animals to vet1.
+        hospital1.addStaff(vet1);
+        owner1.addAnimal(animal1);
+        owner2.addAnimal(animal2);
+        owner3.addAnimal(animal3);
+        animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
+        animal2 = new Animal("Maia", Species.DOG, owner2, hospital1);
+        animal3 = new Animal("Gonzo", Species.CAT, owner2, hospital1);
+        
+        //Add vet2 and create two appointments at the same time so both vets will be busy.
+        hospital1.addStaff(vet2);
+        hospital1.addAppointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal1);
+        hospital1.addAppointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal2);
+        
+        //Tests
+        assert(!hospital1.addAppointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal3)) : 
+                "no appointment should be made, no vet is free";
+        assert(vet1.getAppointments().size() == 1) : "vet1 should have 1 appointments";
+        assert(vet2.getAppointments().size() == 1) : "vet2 should have 1 appointments";
+        assert(owner3.getAppointments().isEmpty()) : "owner3 should have no appointments";
+    }
+    
+    
+    
+    /**
+     * Checks addAppointment works when the owner is not free.
+     */
+    @Test
+    public void addAppointmentOwnerUnavailable()
+    {
+        hospital1.addStaff(vet1);
+        animal1 = new Animal("Freddy", Species.DOG, owner1, hospital1);
+        hospital1.addStaff(vet2);
+        animal2 = new Animal("Maia", Species.DOG, owner1, hospital1);
+        owner1.addAnimal(animal1);
+        owner1.addAnimal(animal2);
+        
+        //Add appointment to occupy the owner
+        hospital1.addAppointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal1);
+        //Create the appointment equal to the one that will occupy the owner to compare against it.
+        appointment1 = new Appointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal1, animal1.getAssignedVet());
+        
+        
+        
+        //Tests
+        assert(owner1.getAppointments().size() == 1 && 
+                owner1.getAppointments().contains(appointment1)) : 
+                "owner1 should have 1 appointment at the start";
+        assert(vet1.getAppointments().size() == 1 && 
+                vet1.getAppointments().contains(appointment1)) : 
+                "vet1 should have 1 appointment at the start";
+        assert(vet2.getAppointments().isEmpty()): 
+                "vet2 should have no appointments at the start";
+        
+        
+        assert(!hospital1.addAppointment(LocalDate.of(2020, 5, 14), 
+                LocalTime.of(9,0), animal2)) : 
+                "No appointment should be made, the owner is busy.";
+        
+        
+        assert(owner1.getAppointments().size() == 1 && 
+                owner1.getAppointments().contains(appointment1)) : 
+                "owner1 should have 1 appointment at the end";
+        assert(vet1.getAppointments().size() == 1 && 
+                vet1.getAppointments().contains(appointment1)) : 
+                "vet1 should have 1 appointment at the end";
+        assert(vet2.getAppointments().isEmpty()): 
+                "vet2 should have no appointments at the end";
+        
     }
 }

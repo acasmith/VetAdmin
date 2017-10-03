@@ -1,4 +1,6 @@
 package vetadmincore;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -296,5 +298,39 @@ public class Owner implements Comparable<Owner> {
         return this.animals.add(anAnimal);
     }
     
+    
+    
+    /**
+     * Adds a new appointment to the owners appointments.
+     * @param anApt an Appointment object.
+     * @return a boolean indicating whether the addition was successful.
+     */
+    public boolean addAppointment(Appointment anApt)
+    {
+        return this.appointments.add(anApt);
+    }
+    
+    
+    
+    /**
+     * Checks to see if the vet has an appointment at the given date and time.
+     * @param aDate the date of the appointment.
+     * @param aTime the time of the appointment.
+     * @return a boolean value indicated whether or not the receiver does not have
+     * an appointment at that date and time.
+     */
+    public boolean isFree(LocalDate aDate, LocalTime aTime)
+    {
+        for(Appointment anAppointment : this.getAppointments())
+            {
+
+                if(anAppointment.getDate().equals(aDate) && 
+                        anAppointment.getTime().equals(aTime))
+                {
+                    return false;
+                }
+            }
+        return true;
+    }
     
 }

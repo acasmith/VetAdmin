@@ -1,5 +1,6 @@
 package vetadmincore;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -339,18 +340,33 @@ public class Hospital implements Comparable<Hospital>{
     
     
     
-    //TODO
+    
     /**
      * Assigns a vet to the given animal. The vet chosen is one who works at the
      * receiver with the fewest assigned animals.
      */
-    /**public Vet assignVet(Animal anAnimal)
+    public Vet assignVet(Animal anAnimal)
     {
-        //TODO
-        ////Remove any existing links between animal and vet before assigning a
-        ////new one.
-        return new Vet();
-    }**/
+        Vet availableVet = null;
+        int lowestAssignedAnimals = Integer.MAX_VALUE;
+        for(Vet aVet : anAnimal.getHospital().getVets())
+        {
+            if(aVet.getAssignedAnimals().size() < lowestAssignedAnimals)
+            {
+                lowestAssignedAnimals = aVet.getAssignedAnimals().size();
+                availableVet = aVet;
+            }
+        }
+        if(availableVet != null)
+        {
+            availableVet.addAnimal(anAnimal);
+        }
+        return availableVet;
+        
+        
+        
+        
+    }
     
     
     
@@ -407,4 +423,56 @@ public class Hospital implements Comparable<Hospital>{
     {
         return this.residents.remove(aResident);
     }
+    
+    
+    
+    /**
+     * Checks to see if the owner is and assignedVet is free. If the assignedVet
+     * is not free then all other vets at the hospital are tried to see if one is free.
+     * If one is found then the appointment is made.
+     * @param aDate the date of the appointment.
+     * @param aTime the time of the appointment.
+     * @param anAnimal the animal whom the appointment is for.
+     * @return a boolean value indicating whether the appointment has been made
+     * successfully or not.
+     */
+    public boolean addAppointment(LocalDate aDate, LocalTime aTime, Animal anAnimal)
+    {
+                    System.out.println("Got this far 1");
+        if(anAnimal.getOwner().isFree(aDate, aTime)) //Checks owner is free
+        {
+                    System.out.println("Got this far 2");
+            Vet freeVet = null;
+                    System.out.println(anAnimal.getAssignedVet());
+            if(anAnimal.getAssignedVet().isFree(aDate, aTime)) //Checks assigned vet
+            {
+                        System.out.println("Got this far 3");
+                freeVet = anAnimal.getAssignedVet();
+            }
+            else                                    //Else checks all other vets.
+            {
+                        System.out.println("Got this far 3");
+                for(Vet aVet : this.getVets())
+                {
+                    if(aVet.isFree(aDate, aTime))
+                    {
+                        freeVet = aVet;
+                        break;
+                    }
+                }
+            }
+            if(freeVet != null)             //If a vet is free, make the appointment
+            {
+                        System.out.println("Got this far 4");
+                Appointment apt = new Appointment(aDate, aTime, anAnimal, freeVet);
+                anAnimal.getOwner().addAppointment(apt);
+                freeVet.addAppointment(apt);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    
 }
