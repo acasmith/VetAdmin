@@ -332,7 +332,35 @@ public class VetAdminCoord {
     }
        
             
-            
+    
+    
+    /**
+     * If aHospital can treat aSpecies, then the new animal is added.
+     * @param aHospital the hospital where the animal is to be registered.
+     * @param aName the name of the animal
+     * @param aSpecies the species of the animal
+     * @param anOwner the owner of the animal
+     * @return a boolean indicating whether the addition was successful.
+     */
+    public boolean addAnimal(Hospital aHospital, String aName, Species aSpecies,
+                                Owner anOwner)
+    {
+        return aHospital.addAnimal(aName, aSpecies, anOwner);
+    }
+    
+    
+    
+    
+    /**
+     * Removes anAnimal from anOwners registered animals.
+     * @param anAnimal the animal to be removed
+     * @return a boolean indicating if the removal was successful.
+     */
+    public boolean removeAnimal(Animal anAnimal)
+    {
+        return anAnimal.getOwner().removeAnimal(anAnimal);
+    }
+    
     
     
     

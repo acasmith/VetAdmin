@@ -333,4 +333,17 @@ public class Owner implements Comparable<Owner> {
         return true;
     }
     
+    
+    
+    
+    /**
+     * Removes anAnimal from the owners registered animals.
+     * @param anAnimal the animal to be removed.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeAnimal(Animal anAnimal)
+    {
+        return this.animals.remove(anAnimal);
+    }
+    
 }

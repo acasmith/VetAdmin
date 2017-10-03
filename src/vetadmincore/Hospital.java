@@ -475,4 +475,24 @@ public class Hospital implements Comparable<Hospital>{
     
     
     
+    /**
+     * If the hospital can treat an animal of this species then a new animal is
+     * registered to anOwner.
+     * @param aName the animals name
+     * @param aSpecies the animals species
+     * @param anOwner the animal owner
+     * @return a boolean value indicating if the addition was successful.
+     */
+    public boolean addAnimal(String aName, Species aSpecies, Owner anOwner)
+    {
+        if(this.getTypesTreated().contains(aSpecies))
+        {
+            return anOwner.addAnimal(new Animal(aName, aSpecies, anOwner, this));
+                    
+        }
+        return false;
+    }
+    
+    
+    
 }

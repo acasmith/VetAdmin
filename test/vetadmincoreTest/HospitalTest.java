@@ -805,4 +805,38 @@ public class HospitalTest {
                 "vet2 should have no appointments at the end";
         
     }
+    
+    
+    
+    /**
+     * Checks if addAnimal works when the hospital can treat its species.
+     */
+    @Test
+    public void addAnimalCanTreat()
+    {
+        Animal targetAnimal = new Animal("Ringo", Species.DOG, owner1, hospital1);
+        assert(owner1.getAnimals().isEmpty()) : 
+                "owner1 should have no animals registered";
+        assert(hospital1.addAnimal("Ringo", Species.DOG, owner1)) :
+                "the new animal should be registered";
+        assert(owner1.getAnimals().size() == 1 &&
+                owner1.getAnimals().contains(targetAnimal)) :
+                "owner1 should have targetAnimal registered only";
+    }
+    
+    
+    
+    /**
+     * Checks if addAnimal works when the hospital cannot treat its species.
+     */
+    @Test
+    public void addAnimalCantTreat()
+    {
+        assert(owner1.getAnimals().isEmpty()) : 
+                "owner1 should have no animals registered at the start";
+        assert(!hospital1.addAnimal("Monty", Species.HORSE, owner1)) :
+                "the new animal should not be registered";
+        assert(owner1.getAnimals().isEmpty()) : 
+                "owner1 should have no animals registered at the end";
+    }
 }
