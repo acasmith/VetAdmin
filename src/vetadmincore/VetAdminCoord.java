@@ -306,6 +306,31 @@ public class VetAdminCoord {
     {
         return this.hospitals.remove(aHospital);
     }
+    
+    
+    
+    /**
+     * Returns all of aVets appointments.
+     * @param aVet a Vet object.
+     * @return a copy of aVets appointments collection.
+     */
+    public Set<Appointment> getAppointments(Vet aVet)
+    {
+        return aVet.getAppointments();
+    }
+        
+        
+        
+        /**
+     * Returns all of aOwners appointments.
+     * @param aOwner a Owner object.
+     * @return a copy of aOwners appointments collection.
+     */
+    public Set<Appointment> getAppointments(Owner aOwner)
+    {
+        return aOwner.getAppointments();
+    }
+       
             
             
     
