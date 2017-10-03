@@ -365,6 +365,20 @@ public class VetAdminCoord {
     
     
     /**
+     * Removes anOwner from aHospitals records only if anOwner has no animals
+     * registered with them.
+     * @param aHospital the hospital to remove the record from.
+     * @param anOwner the owner to remove.
+     * @return a boolean value indicating whether or not the removal was successful.
+     */
+    public boolean removeOwner(Hospital aHospital, Owner anOwner)
+    {
+        return aHospital.removeOwner(anOwner);
+    }
+    
+    
+    
+    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {

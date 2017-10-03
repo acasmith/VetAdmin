@@ -495,4 +495,26 @@ public class Hospital implements Comparable<Hospital>{
     
     
     
+    
+    /**
+     * Removes the owner from the hospital records as long as they do not have
+     * an animal registered with the hospital.
+     * @param anOwner the owner to remove.
+     * @return a boolean value indicating whether or not the removal was successful.
+     */
+    public boolean removeOwner(Owner anOwner)
+    {   
+        for(Animal anAnimal : anOwner.getAnimals())
+        {
+            if(anAnimal.getHospital().equals(this))
+            {
+                return false;
+            }
+        }
+        
+        return this.owners.remove(anOwner);
+    }
+    
+    
+    
 }
