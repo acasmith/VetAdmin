@@ -1,4 +1,6 @@
 package vetadmincore;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -11,9 +13,11 @@ public class Hospital implements Comparable<Hospital>{
     private String name;                //Name of the hospital of the hospital.
     private int maxResidents;           //Maximum number of resident animals.
     private Set<Species> typesTreated = new HashSet<Species>();  //Species of animal the hospital can treat.
-    private SortedSet<Staff> staffMembers;    //Collection of staff employed at the hospital.
-    private SortedSet<Owner> owners;    //The owners registered at this hospital.
-    private SortedSet<Resident> residents;  //The animals currently resident in this hospital.
+    private  Set<Staff> staffMembers;    //Collection of staff employed at the hospital.
+    private Set<Owner> owners;    //The owners registered at this hospital.
+    private Set<Resident> residents;  //The animals currently resident in this hospital.
+
+
     
     
     
@@ -34,8 +38,10 @@ public class Hospital implements Comparable<Hospital>{
         this.typesTreated = typesTreated;
         this.maxResidents = maxResidents;
         this.staffMembers = staffMembers;
-        this.owners = new TreeSet<>();
-        this.residents = new TreeSet<>();
+
+        this.owners = new HashSet<>();
+        this.residents = new HashSet<>();
+
         
     }
     
@@ -75,10 +81,10 @@ public class Hospital implements Comparable<Hospital>{
     
     
     /**
-     *Returns all of the owners registered at this hospital.
-     * @return a copy of the owners sorted set.
+     *Returns all of the owners registered at this hospital
+     * @return a copy of the owners  set.
      */
-    public SortedSet<Owner> getOwners()
+    public Set<Owner> getOwners()
     {
         return this.owners;
     }
@@ -87,11 +93,12 @@ public class Hospital implements Comparable<Hospital>{
     
     /**
      * Returns all of the animals resident at the hospital.
-     * @return a copy of the residents sortedSet.
+     * @return a copy of the residents Set.
      */
-    public SortedSet<Resident> getResidents()
+    public Set<Resident> getResidents()
     {
-        return this.residents;
+        return new HashSet<Resident>(this.residents);
+
     }
     
     
@@ -188,41 +195,12 @@ public class Hospital implements Comparable<Hospital>{
         {
             throw new NullPointerException("The compareTo argument is null.");
         }
+
         
-        String receiverName = this.getName().trim().toLowerCase();
-        String argName = aHospital.getName().trim().toLowerCase();
-        int returnValue = 0;
-        
-        //Catches equality
-        if(receiverName.equals(argName))
-        {
-            return returnValue;
-        }
-        //Performs character comparisons on name attributes.
-        else
-        {
-            for(int i = 0; i < receiverName.length() && i < argName.length(); i++)
-            {
-                if(receiverName.charAt(i) < argName.charAt(i))
-                {
-                    returnValue = -1;
-                    break;
-                }
-                else if(receiverName.charAt(i) > argName.charAt(i))
-                {
-                    returnValue = 1;
-                    break;
-                }
-            }
-        }
-        
-        /*Catches where one string is shorter than the other, but is also a 
-        substring of the longer string. Shorter has priority. */
-        if(returnValue == 0)
-        {
-            returnValue = (receiverName.length() < argName.length()) ? -1 : 1;
-        }
+        //COmparison on name.
+        int returnValue = this.getName().compareTo(aHospital.getName());
         return returnValue;
+        
     }
     
     
@@ -231,7 +209,7 @@ public class Hospital implements Comparable<Hospital>{
      * Registers a new owner with the hospital.
      * @param aOwner an Owner object.
      * @return true if the owner was successfully added to the receivers owners
-     * sortedSet. Returns false if the owner is already registered.
+     * Set. Returns false if the owner is already registered.
      */
     public boolean addOwner(Owner anOwner)
     {
@@ -239,23 +217,133 @@ public class Hospital implements Comparable<Hospital>{
     }
     
     
+    
     /**
      * Returns all of the animals registered to the receiver.
-     * @return a sorted set containing all of the animals registered at the 
+     * @return a  set containing all of the animals registered at the 
      * hospital.
      */
-    public SortedSet<Animal> getRegisteredAnimals()
+    public Set<Animal> getRegisteredAnimals()
     {   
-        SortedSet<Animal> results = new TreeSet<>();
+        Set<Animal> results = new HashSet<>();
         for(Owner anOwner : this.getOwners())
         {
             for(Animal anAnimal : anOwner.getAnimals())
             {
-                results.add(anAnimal);
+                if(anAnimal.getHospital().equals(this))
+                {
+                    results.add(anAnimal);
+                }
             }
         }
         return results;
     }
+    
+    
+    
+    /**
+     * Returns all of the staff members employed at the hospital.
+     * @return a copy of the receivers staffMembers  set.
+     */
+    public Set<Staff> getStaff()
+    {
+        return new HashSet<>(this.staffMembers);
+    }
+    
+    
+    
+    /**
+     * Returns all of the treated residents at the hospital.
+     * @return a set containing all of the resident objects in residents with a
+     * true treated attribute.
+     */
+    public Set<Resident> getTreatedResidents()
+    {
+        Set<Resident> results = new HashSet<>();
+        
+        for(Resident aResident : this.getResidents())
+        {
+            if(aResident.hasBeenTreated())
+            {
+                results.add(aResident);
+            }
+        }
+        
+        return results;
+    }
+    
+    
+    
+     /**
+     * Returns all of the untreated residents at the hospital.
+     * @return a set containing all of the resident objects in residents with a
+     * false treated attribute.
+     */
+    public Set<Resident> getUntreatedResidents()
+    {
+        Set<Resident> results = new HashSet<>();
+        
+        for(Resident aResident : this.getResidents())
+        {
+            if(!aResident.hasBeenTreated())
+            {
+                results.add(aResident);
+            }
+        }
+        
+        return results;
+    }
+    
+    
+    
+    /**
+     * Returns all of the vets employed at the hospital.
+     * @return a set containing all of the Vet objects within staffMembers.
+     */
+    public Set<Vet> getVets()
+    {
+        Set<Vet> results = new HashSet<>();
+        for(Staff aStaff : this.getStaff())
+        {
+            if(aStaff instanceof Vet)
+            {
+                results.add((Vet)aStaff);
+            }
+        }
+        return results;
+    }
+    
+    
+    
+    /**
+     * Returns all of the nurses employed at the hospital.
+     * @return a set containing all of the Nurse objects within staffMembers.
+     */
+    public Set<Nurse> getNurses()
+    {
+        Set<Nurse> results = new HashSet<>();
+        for(Staff aStaff : this.getStaff())
+        {
+            if(aStaff instanceof Nurse)
+            {
+                results.add((Nurse)aStaff);
+            }
+        }
+        return results;
+    }
+    
+    
+    
+    /**
+     * Returns whether or not the hospital is currently full.
+     * @return a boolean value representing whether or not the size of residents
+     * is greater than the value of maxResidents.
+     */
+    public boolean isFull()
+    {
+        return this.getResidents().size() >= this.getMaxResidents();
+    }
+    
     
     
     
@@ -265,9 +353,171 @@ public class Hospital implements Comparable<Hospital>{
      */
     public Vet assignVet(Animal anAnimal)
     {
-        //TODO
-        ////Remove any existing links between animal and vet before assigning a
-        ////new one.
-        return new Vet();
+        Vet availableVet = null;
+        int lowestAssignedAnimals = Integer.MAX_VALUE;
+        for(Vet aVet : anAnimal.getHospital().getVets())
+        {
+            if(aVet.getAssignedAnimals().size() < lowestAssignedAnimals)
+            {
+                lowestAssignedAnimals = aVet.getAssignedAnimals().size();
+                availableVet = aVet;
+            }
+        }
+        if(availableVet != null)
+        {
+            availableVet.addAnimal(anAnimal);
+        }
+        return availableVet;
+        
+        
+        
+        
+    }
+    
+    
+    
+   /**
+    * If the resident is of a species the hospital can treat and the hospital is
+    * not full then the resident is recorded.
+    * @param aResident a resident object.
+    * @return boolean value indicating whether or not the addition was successful.
+    */ 
+    public boolean addResident(Animal anAnimal, LocalDate admissionDate, 
+                                String illness, boolean isTreated)
+    {
+        if(this.typesTreated.contains(anAnimal.getSpecies()) &&
+                !this.isFull())
+        {
+            return this.residents.add(new Resident(anAnimal, this, admissionDate,
+                                        illness, isTreated));
+        }
+        return false;
+    }
+    
+    
+    /**
+     * Removes a staff members links to any other hospital and adds them to the 
+     * hospital.
+     * @param aStaff a Staff object.
+     * @return a boolean value indicating if the staff member
+     */
+    public boolean addStaff(Staff aStaff)
+    {
+        return this.staffMembers.add(aStaff);
+    }
+    
+    
+    
+    /**
+     * Removes and links between the receiver and aStaff
+     * @param aStaff a Staff object.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeStaff(Staff aStaff)
+    {
+        return this.getStaff().remove(aStaff);
+    }
+    
+    
+    
+    /**
+     * Removes aResident from the hospitals residents set.
+     * @param aResident a resident object.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeResident(Resident aResident)
+    {
+        return this.residents.remove(aResident);
+    }
+    
+    
+    
+    /**
+     * Checks to see if the owner is and assignedVet is free. If the assignedVet
+     * is not free then all other vets at the hospital are tried to see if one is free.
+     * If one is found then the appointment is made.
+     * @param aDate the date of the appointment.
+     * @param aTime the time of the appointment.
+     * @param anAnimal the animal whom the appointment is for.
+     * @return a boolean value indicating whether the appointment has been made
+     * successfully or not.
+     */
+    public boolean addAppointment(LocalDate aDate, LocalTime aTime, Animal anAnimal)
+    {
+                    System.out.println("Got this far 1");
+        if(anAnimal.getOwner().isFree(aDate, aTime)) //Checks owner is free
+        {
+                    System.out.println("Got this far 2");
+            Vet freeVet = null;
+                    System.out.println(anAnimal.getAssignedVet());
+            if(anAnimal.getAssignedVet().isFree(aDate, aTime)) //Checks assigned vet
+            {
+                        System.out.println("Got this far 3");
+                freeVet = anAnimal.getAssignedVet();
+            }
+            else                                    //Else checks all other vets.
+            {
+                        System.out.println("Got this far 3");
+                for(Vet aVet : this.getVets())
+                {
+                    if(aVet.isFree(aDate, aTime))
+                    {
+                        freeVet = aVet;
+                        break;
+                    }
+                }
+            }
+            if(freeVet != null)             //If a vet is free, make the appointment
+            {
+                        System.out.println("Got this far 4");
+                Appointment apt = new Appointment(aDate, aTime, anAnimal, freeVet);
+                anAnimal.getOwner().addAppointment(apt);
+                freeVet.addAppointment(apt);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    
+    /**
+     * If the hospital can treat an animal of this species then a new animal is
+     * registered to anOwner.
+     * @param aName the animals name
+     * @param aSpecies the animals species
+     * @param anOwner the animal owner
+     * @return a boolean value indicating if the addition was successful.
+     */
+    public boolean addAnimal(String aName, Species aSpecies, Owner anOwner)
+    {
+        if(this.getTypesTreated().contains(aSpecies))
+        {
+            return anOwner.addAnimal(new Animal(aName, aSpecies, anOwner, this));
+                    
+        }
+        return false;
+    }
+    
+    
+    
+    
+    /**
+     * Removes the owner from the hospital records as long as they do not have
+     * an animal registered with the hospital.
+     * @param anOwner the owner to remove.
+     * @return a boolean value indicating whether or not the removal was successful.
+     */
+    public boolean removeOwner(Owner anOwner)
+    {   
+        for(Animal anAnimal : anOwner.getAnimals())
+        {
+            if(anAnimal.getHospital().equals(this))
+            {
+                return false;
+            }
+        }
+        
+        return this.owners.remove(anOwner);
     }
 }

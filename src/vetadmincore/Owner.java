@@ -1,4 +1,7 @@
 package vetadmincore;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -11,9 +14,9 @@ public class Owner implements Comparable<Owner> {
     private boolean staffDiscount;
     private final int iD;
     private Person thePerson;
-    private SortedSet<Hospital> hospitals;
-    public SortedSet<Animal> animals;
-    private SortedSet<Appointment> appointments;
+    private Set<Hospital> hospitals;
+    public Set<Animal> animals;
+    private Set<Appointment> appointments;
     
     
     /**
@@ -27,12 +30,14 @@ public class Owner implements Comparable<Owner> {
         this.iD = VetAdminCoord.getIDCounter();
         this.staffDiscount = hasDiscount;
         this.thePerson = aPerson;
-        this.hospitals = new TreeSet<>();
-        this.animals = new TreeSet<>();
-        this.appointments = new TreeSet<>();
+        this.hospitals = new HashSet<>();
+        this.animals = new HashSet<>();
+        this.appointments = new HashSet<>();
         this.hospitals.add(aHospital); 
     }
     
+    
+   
     /**
      * Returns the owners title.
      * @return a string representing the owners title.
@@ -132,11 +137,11 @@ public class Owner implements Comparable<Owner> {
     /**
      * Returns a collection of all the animals the owner has registered with
      * the hospital.
-     * @return a copy of the animals sorted set.
+     * @return a copy of the animals  set.
      */
-    public SortedSet<Animal> getAnimals()
+    public Set<Animal> getAnimals()
     {
-        return new TreeSet<Animal>(this.animals);
+        return new HashSet<Animal>(this.animals);
     }
     
     
@@ -144,11 +149,11 @@ public class Owner implements Comparable<Owner> {
     
     /**
      * Returns a collection of all the hospitals the owner is registered with.
-     * @return a copy of the hospitals sorted set.
+     * @return a copy of the hospitals  set.
      */
-    public SortedSet<Hospital> getHospitals()
+    public Set<Hospital> getHospitals()
     {
-        return new TreeSet<Hospital>(this.hospitals);
+        return new HashSet<Hospital>(this.hospitals);
     }
     
     
@@ -156,11 +161,11 @@ public class Owner implements Comparable<Owner> {
     
     /**
      * Returns a collection of all the appointments the owner currently has.
-     * @return a copy of the appointments sorted set.
+     * @return a copy of the appointments  set.
      */
-    public SortedSet<Appointment> getAppointments()
+    public Set<Appointment> getAppointments()
     {
-        return new TreeSet<Appointment>(this.appointments);
+        return new HashSet<Appointment>(this.appointments);
     }
     
     
@@ -285,7 +290,7 @@ public class Owner implements Comparable<Owner> {
      * Registers a new animal to the owner.
      * @param aAnimal an animal object to register to the owner.
      * @return returns true if the animal is successfully added to the receivers
-     * animals sortedSet. Returns false if the animal is already registered to
+     * animals Set. Returns false if the animal is already registered to
      * the owner.
      */
     public boolean addAnimal(Animal anAnimal)
@@ -293,5 +298,52 @@ public class Owner implements Comparable<Owner> {
         return this.animals.add(anAnimal);
     }
     
+    
+    
+    /**
+     * Adds a new appointment to the owners appointments.
+     * @param anApt an Appointment object.
+     * @return a boolean indicating whether the addition was successful.
+     */
+    public boolean addAppointment(Appointment anApt)
+    {
+        return this.appointments.add(anApt);
+    }
+    
+    
+    
+    /**
+     * Checks to see if the vet has an appointment at the given date and time.
+     * @param aDate the date of the appointment.
+     * @param aTime the time of the appointment.
+     * @return a boolean value indicated whether or not the receiver does not have
+     * an appointment at that date and time.
+     */
+    public boolean isFree(LocalDate aDate, LocalTime aTime)
+    {
+        for(Appointment anAppointment : this.getAppointments())
+            {
+
+                if(anAppointment.getDate().equals(aDate) && 
+                        anAppointment.getTime().equals(aTime))
+                {
+                    return false;
+                }
+            }
+        return true;
+    }
+    
+    
+    
+    
+    /**
+     * Removes anAnimal from the owners registered animals.
+     * @param anAnimal the animal to be removed.
+     * @return a boolean value indicating if the removal was successful.
+     */
+    public boolean removeAnimal(Animal anAnimal)
+    {
+        return this.animals.remove(anAnimal);
+    }
     
 }
