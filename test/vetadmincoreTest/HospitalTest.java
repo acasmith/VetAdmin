@@ -6,6 +6,7 @@ package vetadmincoreTest;
  * and open the template in the editor.
  */
 
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.junit.After;
@@ -80,7 +81,6 @@ public class HospitalTest {
                                 set1, 5);
         hospital2 = new Hospital("York", staffSet, set2, 13);
         hospital3 = new Hospital("York", staffSet, set2, 13);
-        
         person1 = new Person("Mr", "Buddy", "Holly", "24 Cardigan Way", 
                                 "buddy@dmail.com", "04323444666");
         person2 = new Person("Miss", "Beyonce", "Knowles", "58 Boogie Down",
@@ -115,9 +115,7 @@ public class HospitalTest {
     @After
     public void tearDown() {
     }
-    
-    
-    
+
 
     //*******Tests*******
     
@@ -247,7 +245,6 @@ public class HospitalTest {
         owner2.addAnimal(animal3);
         hospital1.addOwner(owner1); //Register owners with hospital.
         hospital1.addOwner(owner2);
-        
         Set<Animal> results = hospital1.getRegisteredAnimals();
         assert(results.equals(testSet));
     }

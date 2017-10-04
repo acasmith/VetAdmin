@@ -1,4 +1,5 @@
 package vetadmincore;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -36,8 +37,7 @@ public class Owner implements Comparable<Owner> {
     }
     
     
-    
-    
+   
     /**
      * Returns the owners title.
      * @return a string representing the owners title.

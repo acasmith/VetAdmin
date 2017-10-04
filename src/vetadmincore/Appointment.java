@@ -1,12 +1,25 @@
+
 package vetadmincore;
 import java.time.*;
 
 /**
  * Models an appointment made by an owner for a vet to see an animal.
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package vetadmincore;
+
+/**
+ *
+
  * @author Adam
  */
 public class Appointment {
     
+
     private LocalDate date;                 //Date of the appointment.
     private LocalTime time;                 //Time of the appointment.
     private Animal patient;                 //The animal to be seen.
@@ -135,4 +148,6 @@ public class Appointment {
         return result + equalsFieldsHash;
     }
     
+
+
 }

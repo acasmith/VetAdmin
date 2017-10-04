@@ -6,11 +6,13 @@ package vetadmincore;
  */
 public class Animal implements Comparable<Animal>{
     
+
     private final String name;                //Name of the animal
     private final Species species;            //The animals species.
     private final Owner owner;                //The animals owner.
     private Vet assignedVet;            //The vet assigned to the animal.
     private Hospital hospital;          //The hospital the animal is registered at.
+
     
     
     /**
@@ -18,6 +20,7 @@ public class Animal implements Comparable<Animal>{
      * @param name Name of the animal
      * @param species The animals species.
      * @param owner The animals owner.
+
      */
     public Animal(String name, Species species, Owner owner, 
                     Hospital registeredHospital)
@@ -25,6 +28,7 @@ public class Animal implements Comparable<Animal>{
         this.name = name;
         this.species = species;
         this.owner = owner;
+
         this.hospital = registeredHospital;
         this.assignedVet = this.getHospital().assignVet(this);
     }
@@ -38,6 +42,7 @@ public class Animal implements Comparable<Animal>{
     public Hospital getHospital()
     {
         return this.hospital;
+
     }
     
     

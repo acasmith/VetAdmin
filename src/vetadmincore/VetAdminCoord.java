@@ -10,8 +10,6 @@ public class VetAdminCoord {
     
     private static VetAdminCoord instance = null;
     public static int idCounter = 0;    //Used in creation of staff and owner objects.
-    
-    
     private Set<Hospital> hospitals;
     private Set<Owner> owners;
     
@@ -378,6 +376,7 @@ public class VetAdminCoord {
     
     
     
+
     /**
      * @param args the command line arguments
      */

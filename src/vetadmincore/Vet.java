@@ -112,7 +112,4 @@ public class Vet extends MedicalStaff{
             }
         return true;
     }
-    
-    
-    
 }

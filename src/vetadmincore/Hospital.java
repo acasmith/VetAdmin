@@ -13,9 +13,11 @@ public class Hospital implements Comparable<Hospital>{
     private String name;                //Name of the hospital of the hospital.
     private int maxResidents;           //Maximum number of resident animals.
     private Set<Species> typesTreated = new HashSet<Species>();  //Species of animal the hospital can treat.
-    public  Set<Staff> staffMembers;    //Collection of staff employed at the hospital.
+    private  Set<Staff> staffMembers;    //Collection of staff employed at the hospital.
     private Set<Owner> owners;    //The owners registered at this hospital.
     private Set<Resident> residents;  //The animals currently resident in this hospital.
+
+
     
     
     
@@ -29,15 +31,17 @@ public class Hospital implements Comparable<Hospital>{
      *                      the hospital.
      * @param maxResidents  the maximum number of resident animals.
      */
-    public Hospital(String name, Set<Staff> staffMembers, 
+    public Hospital(String name, SortedSet<Staff> staffMembers, 
                     Set<Species> typesTreated, int maxResidents)
     {
         this.name = name;
         this.typesTreated = typesTreated;
         this.maxResidents = maxResidents;
         this.staffMembers = staffMembers;
+
         this.owners = new HashSet<>();
         this.residents = new HashSet<>();
+
         
     }
     
@@ -77,7 +81,7 @@ public class Hospital implements Comparable<Hospital>{
     
     
     /**
-     *Returns all of the owners registered at this hospital.
+     *Returns all of the owners registered at this hospital
      * @return a copy of the owners  set.
      */
     public Set<Owner> getOwners()
@@ -94,6 +98,7 @@ public class Hospital implements Comparable<Hospital>{
     public Set<Resident> getResidents()
     {
         return new HashSet<Resident>(this.residents);
+
     }
     
     
@@ -190,6 +195,7 @@ public class Hospital implements Comparable<Hospital>{
         {
             throw new NullPointerException("The compareTo argument is null.");
         }
+
         
         //COmparison on name.
         int returnValue = this.getName().compareTo(aHospital.getName());
@@ -514,7 +520,4 @@ public class Hospital implements Comparable<Hospital>{
         
         return this.owners.remove(anOwner);
     }
-    
-    
-    
 }

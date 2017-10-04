@@ -115,7 +115,6 @@ public class VetAdminCoordTest {
     @After
     public void tearDown() {
     }
-
  
     
     //*****Tests*****
@@ -471,10 +470,6 @@ public class VetAdminCoordTest {
                 "hospital1 should not have been added to admin1's hospitals collection";
         admin1.removeHospital(hospital1);
     }
-    
-    
-    
-    
     
 
 }
